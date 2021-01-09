@@ -1,14 +1,20 @@
 /* eslint-disable */
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {Navbar, Nav, NavDropdown, Button, Jumbotron} from 'react-bootstrap';
 import './App.css';
 import Data from './Data.js';
 import { Link, Route, Switch } from 'react-router-dom';
 import Detail from './Detail.js';
+import axios from 'axios';
+
+
+export let stockContext = React.createContext();
+
 
 function App() {
 
   let [shoes, shoes변경] = useState(Data);
+  let [stock, stock변경] = useState([10,11,12]);
 
   return (
     <div className="App">
@@ -19,8 +25,8 @@ function App() {
   <Navbar.Toggle aria-controls="basic-navbar-nav" />
   <Navbar.Collapse id="basic-navbar-nav">
     <Nav className="mr-auto">
-      <Nav.Link><Link to="/">Home</Link></Nav.Link>
-      <Nav.Link><Link to="/detail">Detail</Link></Nav.Link>
+      <Nav.Link as={Link} to="/">Home</Nav.Link>
+      <Nav.Link as={Link} to="/detail">Detail</Nav.Link>
       <NavDropdown title="Dropdown" id="basic-nav-dropdown">
         <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
         <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
@@ -46,6 +52,9 @@ function App() {
   </Jumbotron>
 
   <div className="container">
+
+      <stockContext.Provider value={stock}>
+
       <div className="row">
       { 
         shoes.map((a,i)=>{
@@ -53,11 +62,26 @@ function App() {
          })
       }
       </div>
+
+      </stockContext.Provider>
+
+      <Button className="btn btn-primary" onClick={()=>{
+
+        
+
+        axios.get('https://codingapple1.github.io/shop/data2.json')
+        .then((result)=>{
+          shoes변경([...shoes, ...result.data]);
+        })
+        .catch(()=>{})
+      }}>더보기</Button>
   </div>
 </Route>
 
 <Route path="/detail/:id">
-  <Detail shoes={shoes}/>
+  <stockContext.Provider value={stock}>
+  <Detail shoes={shoes} stock={stock} stock변경={stock변경}/>
+  </stockContext.Provider>
 </Route>
 
 <Route path="/:id">
@@ -73,11 +97,15 @@ function App() {
 
 
 function Card(props){
+
+  let stock = useContext(stockContext);
+   
   return (
     <div className="col-md-4">
       <img src={ 'https://codingapple1.github.io/shop/shoes' + (props.i+1) + '.jpg' } width="100%"/>
       <h4>{ props.shoes.title }</h4>
       <p>{ props.shoes.content } & { props.shoes.price }</p>
+      {stock[props.i]}
     </div>
   )
 }

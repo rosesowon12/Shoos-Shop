@@ -1,0 +1,44 @@
+$mainColor : #ff0000;
+
+.red{
+    color : $mainColor;
+}
+
+.my-alert{
+    background-color: #eeeeee;
+    padding : 20px;
+    border-radius: 5px;
+    max-width: 500px;
+    width: 100%;
+    margin: auto;
+}
+
+//scss component를 복사해서 원한는 것만 바꾸기
+.my-alert-red{
+    @extend .my-alert;
+    background: red;
+}
+
+
+
+.my-alert p{
+    margin-bottom: 0;
+}
+
+// div.container h4{
+//     color : blue;
+// }
+
+// div.container p{
+//     color : green;
+// }
+
+// div.container{
+//     h4 {
+//         color : blue;
+//     }
+
+//     p {
+//         color : green
+//     }
+// }
