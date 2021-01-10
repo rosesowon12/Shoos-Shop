@@ -1,11 +1,13 @@
 /* eslint-disable */
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, lazy, Suspense} from 'react';
 import {Navbar, Nav, NavDropdown, Button, Jumbotron} from 'react-bootstrap';
 import './App.css';
 import Data from './Data.js';
-import { Link, Route, Switch } from 'react-router-dom';
-import Detail from './Detail.js';
+import { Link, Route, Switch, useHistory } from 'react-router-dom';
+//import Detail from './Detail.js';
+let Detail = lazy(()=>{ return import('./Detail.js')}); //<-Detail.js가 필요할때만 로딩한다.
 import axios from 'axios';
+import Cart from './Cart.js';
 
 
 export let stockContext = React.createContext();
@@ -80,8 +82,14 @@ function App() {
 
 <Route path="/detail/:id">
   <stockContext.Provider value={stock}>
+  <Suspense fallback={<div>로딩중입니다.</div>}>
   <Detail shoes={shoes} stock={stock} stock변경={stock변경}/>
+  </Suspense>
   </stockContext.Provider>
+</Route>
+
+<Route path="/cart">
+  <Cart></Cart>
 </Route>
 
 <Route path="/:id">
@@ -99,13 +107,14 @@ function App() {
 function Card(props){
 
   let stock = useContext(stockContext);
+  let history = useHistory();
    
   return (
-    <div className="col-md-4">
+    <div className="col-md-4" onClick={()=>{  history.push('/detail/'+props.shoes.id)}} >
       <img src={ 'https://codingapple1.github.io/shop/shoes' + (props.i+1) + '.jpg' } width="100%"/>
       <h4>{ props.shoes.title }</h4>
-      <p>{ props.shoes.content } & { props.shoes.price }</p>
-      {stock[props.i]}
+      <p>{ props.shoes.content } </p> <p>{ props.shoes.price }원</p>
+      <p>재고 : {stock[props.i]}</p>
     </div>
   )
 }
