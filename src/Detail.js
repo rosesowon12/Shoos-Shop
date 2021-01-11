@@ -37,7 +37,21 @@ function Detail(props) {
       }
     }, [alert]);
 
-   
+    useEffect(  ()=>{
+      var arr = localStorage.getItem('watched');
+      if(arr == null) {
+        arr = []
+      } else {  
+        arr = JSON.parse(arr); 
+      }
+      
+      arr.push(id);
+      arr = new Set(arr);
+      arr = [...arr];
+
+      localStorage.setItem('watched',JSON.stringify(arr))
+
+    },[]);
 
     let history = useHistory();
 

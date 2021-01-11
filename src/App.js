@@ -17,6 +17,7 @@ function App() {
 
   let [shoes, shoes변경] = useState(Data);
   let [stock, stock변경] = useState([10,11,12]);
+  
 
   return (
     <div className="App">
@@ -97,6 +98,12 @@ function App() {
 </Route>
 
 </Switch>
+      <div class="d-none d-xl-block col-xl-2 Toc-SidePanel-module--cls2--2asdS Toc-SidePanel-module--cls1--3q6jy"> == $0
+        <ul class="list-unstyled">
+
+        </ul>
+        </div>
+
     </div>
   )
 }
@@ -108,6 +115,7 @@ function Card(props){
 
   let stock = useContext(stockContext);
   let history = useHistory();
+  
    
   return (
     <div className="col-md-4" onClick={()=>{  history.push('/detail/'+props.shoes.id)}} >
